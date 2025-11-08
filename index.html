@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Quiz Generator | Vaibhav Nhayade</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    * { scroll-behavior: smooth; }
+
+    .glow {
+      transition: all 0.3s ease;
+    }
+    .glow:hover {
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .input-card {
+      background-color: white;
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+      padding: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .input-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .soft-bg {
+      background-color: #e0e7ff;
+    }
+
+    /* Keep your hero background and animation */
+    .hero-bg {
+      background: linear-gradient(135deg, #3b82f6, #6366f1, #2563eb);
+      background-size: 300% 300%;
+      animation: gradient 6s ease infinite;
+    }
+    @keyframes gradient {
+      0%, 100% { background-position: left top; }
+      50% { background-position: right bottom; }
+    }
+    .fade-in {
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+  </style>
+</head>
+
+<body id="body" class="min-h-screen flex flex-col bg-white text-gray-900 font-sans transition">
+
+  <!-- NAVBAR -->
+  <header class="sticky top-0 z-50 bg-white border-b shadow-sm">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-8">
+        <div class="text-2xl font-bold text-blue-600">AI Quiz Generator</div>
+        <nav class="hidden sm:flex gap-6 text-gray-700 font-medium">
+          <a href="#" class="hover:text-blue-600">Home</a>
+          <a href="#" class="hover:text-blue-600">Blog</a>
+          <a href="#" class="hover:text-blue-600">Pricing</a>
+        </nav>
+      </div>
+      <div class="flex items-center gap-4" id="navRight">
+        <button id="loginBtn" class="text-blue-600 hover:underline">Login</button>
+        <button id="signupBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 glow">Sign Up</button>
+      </div>
+    </div>
+
+    <!-- Social Header Bar -->
+    <div class="border-t bg-gray-50">
+      <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-center gap-6">
+        <a href="https://github.com/Vaibhav-nhayade/SEM3" target="_blank" class="hover:text-blue-600 flex items-center gap-2" aria-label="GitHub">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="text-gray-700">
+            <path d="M12 .5C5.73.5.75 5.48.75 11.77c0 4.88 3.16 9.01 7.55 10.47.55.1.75-.24.75-.53v-1.86c-3.07.67-3.72-1.49-3.72-1.49-.5-1.28-1.23-1.62-1.23-1.62-.99-.68.08-.67.08-.67 1.1.08 1.67 1.13 1.67 1.13.97 1.66 2.56 1.18 3.18.9.1-.7.38-1.18.69-1.45-2.45-.28-5.02-1.22-5.02-5.41 0-1.2.43-2.18 1.14-2.95-.12-.28-.5-1.4.11-2.92 0 0 .93-.3 3.05 1.12a10.4 10.4 0 012.78-.38c.94 0 1.9.13 2.78.38 2.11-1.42 3.04-1.12 3.04-1.12.61 1.52.23 2.64.11 2.92.71.77 1.14 1.75 1.14 2.95 0 4.2-2.57 5.13-5.02 5.4.39.35.74 1.03.74 2.08v3.08c0 .29.2.64.76.53 4.38-1.46 7.53-5.6 7.53-10.47C23.25 5.48 18.27.5 12 .5z"/>
+          </svg>
+          <span>GitHub</span>
+        </a>
+        <a href="https://in.linkedin.com/in/vaibhav-nhayade" target="_blank" class="hover:text-blue-600 flex items-center gap-2" aria-label="LinkedIn">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" class="text-gray-700">
+            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.026-3.037-1.852-3.037-1.854 0-2.137 1.448-2.137 2.944v5.662H9.348V9h3.414v1.561h.049c.476-.9 1.635-1.852 3.366-1.852 3.599 0 4.264 2.37 4.264 5.455v6.288zM5.337 7.433c-1.144 0-2.07-.93-2.07-2.078 0-1.148.926-2.078 2.07-2.078 1.142 0 2.07.93 2.07 2.078 0 1.148-.928 2.078-2.07 2.078zM6.815 20.452H3.86V9h2.955v11.452z"/>
+          </svg>
+          <span>LinkedIn</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="hero-bg text-white text-center py-24 px-6 fade-in">
+    <h1 class="text-5xl font-extrabold mb-4 float">Create Smarter Quizzes with AI 🤖</h1>
+    <p class="text-lg max-w-2xl mx-auto opacity-90 mb-8">
+      Transform your notes into interactive quizzes instantly using offline AI NLP magic!
+    </p>
+    <a href="#mainInput" class="bg-white text-blue-700 font-semibold px-8 py-3 rounded-full glow hover:bg-blue-100 transition">
+      🚀 Start Generating
+    </a>
+  </section>
+
+  <!-- MAIN -->
+  <main class="flex-1 py-16 soft-bg">
+    <div class="max-w-3xl mx-auto text-center px-6">
+      <p class="text-gray-700 mb-6 text-lg">
+        Generate quizzes quickly from a prompt, and experience the new age technology of AI-driven education tools designed to save your time and boost productivity.
+      </p>
+
+      <h2 class="text-blue-700 font-bold text-lg mb-6 uppercase tracking-wide">Please Enter Prompt to Generate Quiz</h2>
+
+      <div class="input-card text-left">
+        <label class="block text-sm font-medium text-gray-700 mb-2">Enter prompt / topic</label>
+        <textarea id="mainInput" rows="5" placeholder="Type a meaningful prompt, e.g. 'Create 10 MCQ questions on photosynthesis for 12th grade'" class="w-full border border-blue-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-400"></textarea>
+
+        <p class="text-gray-500 text-sm mt-2">
+          <strong>Note:</strong> Number of questions depends on the length of the paragraph. Minimum 100 words required. Maximum quiz questions generated will be limited to 15.
+        </p>
+
+        <div class="mt-6 flex flex-wrap gap-3 justify-center">
+          <button class="border-2 border-blue-500 text-blue-600 px-4 py-2 rounded-full hover:bg-blue-100 glow" onclick="document.getElementById('questionType').value='FIB'">Fill in the Blank</button>
+          <button class="border-2 border-blue-500 text-blue-600 px-4 py-2 rounded-full hover:bg-blue-100 glow" onclick="document.getElementById('questionType').value='MCQ'">Multiple Choice</button>
+          <button class="border-2 border-blue-500 text-blue-600 px-4 py-2 rounded-full hover:bg-blue-100 glow" onclick="document.getElementById('questionType').value='TF'">True / False</button>
+        </div>
+
+        <button id="generateBtn" class="mt-8 bg-blue-600 text-white w-full py-3 rounded-full font-semibold hover:bg-blue-700 glow transition">
+          Generate Quiz
+        </button>
+        <div id="statusMessage" class="hidden mt-3 text-blue-600 text-center text-sm">⏳ Generating using local NLP engine...</div>
+      </div>
+    </div>
+
+<!-- HOW IT WORKS SECTION -->
+<!-- HOW IT WORKS SECTION -->
+
+
+<section id="howItWorks" class="py-16 bg-white fade-in">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h2 class="text-4xl font-bold text-blue-700 mb-12 flex items-center justify-center gap-3">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="w-8 h-8 text-yellow-400" viewBox="0 0 20 20">
+        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.964a1 1 0 00.95.69h4.173c.969 0 1.371 1.24.588 1.81l-3.377 2.454a1 1 0 00-.364 1.118l1.287 3.964c.3.922-.755 1.688-1.54 1.118l-3.376-2.454a1 1 0 00-1.175 0l-3.376 2.454c-.785.57-1.84-.196-1.54-1.118l1.287-3.964a1 1 0 00-.364-1.118L2.05 9.39c-.783-.57-.38-1.81.588-1.81h4.173a1 1 0 00.95-.69l1.286-3.964z"/>
+      </svg>
+      How It Works
+    </h2>
+
+    <div class="relative flex flex-col md:flex-row items-center justify-center gap-8 md:gap-12 mt-10">
+      <!-- Connecting Line -->
+      <div class="absolute hidden md:block w-2/3 h-1 bg-gradient-to-r from-blue-400 via-yellow-400 to-blue-400 top-1/2 left-1/2 -translate-x-1/2"></div>
+
+      <!-- Step 1 -->
+      <div class="step-box relative z-10 cursor-pointer bg-yellow-100 border-2 border-yellow-300 rounded-xl shadow-md p-6 w-64 transition transform hover:scale-105"
+           onclick="toggleStep(this)">
+        <div class="flex flex-col items-center text-center">
+          <div class="text-3xl mb-3 text-yellow-500">①</div>
+          <h3 class="text-xl font-semibold text-blue-700 mb-2">Enter a Prompt</h3>
+          <p class="text-gray-700 text-sm leading-snug">Provide a meaningful, specific prompt or topic. Clear prompts produce better question sets.</p>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-box relative z-10 cursor-pointer bg-yellow-100 border-2 border-yellow-300 rounded-xl shadow-md p-6 w-64 transition transform hover:scale-105"
+           onclick="toggleStep(this)">
+        <div class="flex flex-col items-center text-center">
+          <div class="text-3xl mb-3 text-yellow-500">②</div>
+          <h3 class="text-xl font-semibold text-blue-700 mb-2">Specify Quiz Details</h3>
+          <p class="text-gray-700 text-sm leading-snug">Select question type (MCQ, Fill-in-the-blank, True/False) and number of questions required.</p>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step-box relative z-10 cursor-pointer bg-yellow-100 border-2 border-yellow-300 rounded-xl shadow-md p-6 w-64 transition transform hover:scale-105"
+           onclick="toggleStep(this)">
+        <div class="flex flex-col items-center text-center">
+          <div class="text-3xl mb-3 text-yellow-500">③</div>
+          <h3 class="text-xl font-semibold text-blue-700 mb-2">Review and Share</h3>
+          <p class="text-gray-700 text-sm leading-snug">Check generated questions, edit if needed, and distribute to students or peers.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .step-box.active {
+    background-color: #000;
+    border-color: #facc15;
+    color: #fef9c3;
+    box-shadow: 0 0 25px rgba(250, 204, 21, 0.6);
+    transform: scale(1.07);
+  }
+  .step-box.active h3,
+  .step-box.active p {
+    color: #fef9c3;
+  }
+</style>
+
+<script>
+  // Toggle step highlight on click
+  function toggleStep(el) {
+    el.classList.toggle('active');
+  }
+</script>
+
+</section>
+<!-- BENEFITS SECTION -->
+<section id="benefits" class="py-16 bg-blue-50 fade-in">
+  <div class="max-w-6xl mx-auto px-6 text-center">
+    <h2 class="text-4xl font-bold text-blue-700 mb-10">
+      Benefits of <span class="text-yellow-500">AI Quiz Generator</span>
+    </h2>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+      <!-- Save Time -->
+      <div class="p-6 bg-white rounded-2xl shadow hover:shadow-xl hover:scale-105 transition transform border-t-4 border-yellow-400">
+        <div class="flex justify-center mb-3">
+          <!-- Clock Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke-width="2" stroke="#3b82f6" class="w-10 h-10">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"></circle>
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 7v5l3 3" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-blue-700 mb-2">Save Time</h3>
+        <p class="text-gray-600">Generate quizzes instantly using AI and cut down hours of manual work.</p>
+      </div>
+
+      <!-- Multiple Question Types -->
+      <div class="p-6 bg-white rounded-2xl shadow hover:shadow-xl hover:scale-105 transition transform border-t-4 border-blue-400">
+        <div class="flex justify-center mb-3">
+          <!-- MCQ Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke-width="2" stroke="#3b82f6" class="w-10 h-10">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M4 6h16M4 12h8m-8 6h16" />
+            <circle cx="18" cy="12" r="1.5" fill="#facc15"></circle>
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-blue-700 mb-2">Multiple Question Types</h3>
+        <p class="text-gray-600">Support for MCQs, T/F, short answers and more to fit your course needs.</p>
+      </div>
+
+      <!-- Versatile Input -->
+      <div class="p-6 bg-white rounded-2xl shadow hover:shadow-xl hover:scale-105 transition transform border-t-4 border-indigo-400">
+        <div class="flex justify-center mb-3">
+          <!-- Document Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke-width="2" stroke="#3b82f6" class="w-10 h-10">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M9 12h6m-6 4h6M8 6h8l4 4v8a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2z" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-blue-700 mb-2">Versatile Input</h3>
+        <p class="text-gray-600">Use a prompt, upload a file, or provide a document to generate quizzes.</p>
+      </div>
+
+      <!-- Easy Customization -->
+      <div class="p-6 bg-white rounded-2xl shadow hover:shadow-xl hover:scale-105 transition transform border-t-4 border-green-400">
+        <div class="flex justify-center mb-3">
+          <!-- Settings / Customization Icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke-width="2" stroke="#3b82f6" class="w-10 h-10">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M12 8c-2.21 0-4 1.79-4 4m0 0a4 4 0 008 0m-8 0a4 4 0 008 0m0 0V6m0 12v2m4-6h2M4 12H2m16-8v2m0 12v2m-4-6h2M4 12H2" />
+          </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-blue-700 mb-2">Easy Customization</h3>
+        <p class="text-gray-600">Edit and refine generated questions to suit your syllabus and difficulty level.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FAQ SECTION -->
+<section id="faq" class="py-20 bg-white fade-in border-t border-gray-200">
+  <div class="max-w-5xl mx-auto px-6">
+    <h2 class="text-4xl font-bold text-center text-blue-700 mb-12">
+      Frequently Asked Questions
+    </h2>
+
+    <div class="space-y-6">
+
+      <!-- FAQ Item -->
+      <div class="faq-item border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+        <button class="faq-question flex justify-between items-center w-full p-5 text-left text-lg font-semibold text-blue-700">
+          <span>1. How does the AI ensure the questions it generates are relevant to the source text?</span>
+          <span class="faq-icon text-blue-600 text-3xl font-light transition">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 hidden text-gray-700 leading-relaxed">
+          The website states the tool uses “offline AI NLP magic” and a “local NLP engine” for generation, implying that it uses Natural Language Processing (NLP) techniques to analyze the input text/prompt and create relevant questions. The system requires a “meaningful prompt” to produce better results.
+        </div>
+      </div>
+
+      <!-- FAQ Item -->
+      <div class="faq-item border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+        <button class="faq-question flex justify-between items-center w-full p-5 text-left text-lg font-semibold text-blue-700">
+          <span>2. What types of source text or content can the AI use to generate a quiz?</span>
+          <span class="faq-icon text-blue-600 text-3xl font-light transition">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 hidden text-gray-700 leading-relaxed">
+          The main input mechanism is a “prompt / topic” entered into a large text area. The Benefits section mentions “Use a prompt, upload a file, or provide a document”, indicating support for various input types, though the primary interface shown is text input.
+        </div>
+      </div>
+
+      <!-- FAQ Item -->
+      <div class="faq-item border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+        <button class="faq-question flex justify-between items-center w-full p-5 text-left text-lg font-semibold text-blue-700">
+          <span>3. What different quiz formats can the generator create?</span>
+          <span class="faq-icon text-blue-600 text-3xl font-light transition">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 hidden text-gray-700 leading-relaxed">
+          The interface explicitly provides buttons for generating quizzes in three formats: Multiple Choice (MCQ), Fill in the Blank (FIB), and True / False (TF). The Benefits section also lists “short answers and more” as supported types.
+        </div>
+      </div>
+
+      <!-- FAQ Item -->
+      <div class="faq-item border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+        <button class="faq-question flex justify-between items-center w-full p-5 text-left text-lg font-semibold text-blue-700">
+          <span>4. Is there a limit to the length of the source text or number of generated questions?</span>
+          <span class="faq-icon text-blue-600 text-3xl font-light transition">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 hidden text-gray-700 leading-relaxed">
+          Yes, the note under the input box specifies clear limits: “Minimum 100 words required” and “Maximum quiz questions generated will be limited to 15.” The number of questions also depends on the length of the paragraph.
+        </div>
+      </div>
+
+      <!-- FAQ Item -->
+      <div class="faq-item border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+        <button class="faq-question flex justify-between items-center w-full p-5 text-left text-lg font-semibold text-blue-700">
+          <span>5. How accurate are the generated questions and what quality control measures exist?</span>
+          <span class="faq-icon text-blue-600 text-3xl font-light transition">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 hidden text-gray-700 leading-relaxed">
+          The system promotes itself as a tool to “Create Smarter Quizzes with AI.” Quality control is implied through the “Review and Share” step — users are advised to review and edit generated questions before sharing.
+        </div>
+      </div>
+
+      <!-- FAQ Item -->
+      <div class="faq-item border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+        <button class="faq-question flex justify-between items-center w-full p-5 text-left text-lg font-semibold text-blue-700">
+          <span>6. Can I review, edit, and save the quizzes before finalizing them?</span>
+          <span class="faq-icon text-blue-600 text-3xl font-light transition">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 hidden text-gray-700 leading-relaxed">
+          Yes, the “How It Works” section states the final step is “Check generated questions, edit if needed.” The Benefits section also lists “Easy Customization” and the ability to “Edit and refine generated questions.” (No mention of providing hints or explanations.)
+        </div>
+      </div>
+
+      <!-- FAQ Item -->
+      <div class="faq-item border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+        <button class="faq-question flex justify-between items-center w-full p-5 text-left text-lg font-semibold text-blue-700">
+          <span>7. What export options are available for the final quiz?</span>
+          <span class="faq-icon text-blue-600 text-3xl font-light transition">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 hidden text-gray-700 leading-relaxed">
+          The provided HTML structure does not specify export options such as PDF or JSON, nor any LMS integration features.
+        </div>
+      </div>
+
+      <!-- FAQ Item -->
+      <div class="faq-item border border-gray-200 rounded-xl shadow-sm hover:shadow-md transition">
+        <button class="faq-question flex justify-between items-center w-full p-5 text-left text-lg font-semibold text-blue-700">
+          <span>8. Is my uploaded source text kept private and secure?</span>
+          <span class="faq-icon text-blue-600 text-3xl font-light transition">+</span>
+        </button>
+        <div class="faq-answer px-5 pb-5 hidden text-gray-700 leading-relaxed">
+          The site emphasizes that it uses an “offline AI NLP engine” — processing is done locally. The Privacy Policy alert also says “Your data is private and local,” meaning your text is not shared or stored externally.
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  /* Smooth animation for answer toggle */
+  .faq-answer {
+    transition: all 0.4s ease;
+  }
+  .faq-item.open .faq-answer {
+    display: block;
+    animation: fadeIn 0.4s ease;
+  }
+  .faq-item.open .faq-icon {
+    transform: rotate(45deg);
+    color: #facc15;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
+
+<script>
+  // FAQ toggle script
+  document.querySelectorAll('.faq-question').forEach(button => {
+    button.addEventListener('click', () => {
+      const faqItem = button.parentElement;
+      const isOpen = faqItem.classList.contains('open');
+
+      // Close all open items
+      document.querySelectorAll('.faq-item').forEach(item => item.classList.remove('open'));
+
+      // Toggle the clicked one
+      if (!isOpen) faqItem.classList.add('open');
+    });
+  });
+</script>
+
+
+
+
+<!-- SUBSCRIBE SECTION -->
+<section id="subscribe" class="py-20 bg-blue-50 fade-in border-t border-gray-200">
+  <div class="max-w-2xl mx-auto text-center px-6">
+    <h2 class="text-4xl font-bold text-blue-700 mb-4">Subscribe to Get Future Updates</h2>
+    <p class="text-gray-600 mb-8">Stay informed with the latest AI Quiz Generator improvements, new features, and educational insights. Subscribe now to receive updates directly in your inbox.</p>
+
+    <form id="subscribeForm" class="bg-white rounded-2xl shadow-lg p-6 flex flex-col md:flex-row items-center justify-center gap-4 mx-auto max-w-xl">
+      <input type="email" id="subscribeEmail" required placeholder="Enter your email address"
+             class="w-full md:flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+
+      <button type="submit" class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 glow transition">Subscribe</button>
+    </form>
+
+    <div class="flex items-center justify-center gap-2 mt-4 text-sm text-gray-600">
+      <input type="checkbox" id="termsCheckbox" class="w-4 h-4 border-gray-300 rounded focus:ring-blue-500" required>
+      <label for="termsCheckbox">I agree to the <a href="#privacy" class="text-blue-600 hover:underline">Terms and Conditions</a>.</label>
+    </div>
+  </div>
+
+  <!-- Thank You Popup -->
+  <div id="thankYouPopup" class="fixed inset-0 bg-black/60 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-2xl shadow-xl text-center p-8 w-[90%] max-w-md fade-in">
+      <h3 class="text-2xl font-bold text-blue-700 mb-3">Thank You for Subscribing!</h3>
+      <p class="text-gray-700 mb-6">You’ve successfully joined our mailing list. Stay tuned for exciting updates and announcements!</p>
+      <button id="closePopup" class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition glow">Close</button>
+    </div>
+  </div>
+</section>
+
+<style>
+  #thankYouPopup {
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+</style>
+
+<script>
+  const subscribeForm = document.getElementById('subscribeForm');
+  const thankYouPopup = document.getElementById('thankYouPopup');
+  const closePopup = document.getElementById('closePopup');
+  const emailInput = document.getElementById('subscribeEmail');
+  const termsCheckbox = document.getElementById('termsCheckbox');
+
+  subscribeForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!termsCheckbox.checked) {
+      alert("⚠️ Please agree to the Terms and Conditions before subscribing.");
+      return;
+    }
+
+    // Simulate successful subscription
+    thankYouPopup.classList.remove('hidden');
+    thankYouPopup.classList.add('flex');
+    emailInput.value = '';
+    termsCheckbox.checked = false;
+  });
+
+  closePopup.addEventListener('click', () => {
+    thankYouPopup.classList.add('hidden');
+    thankYouPopup.classList.remove('flex');
+  });
+</script>
+
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="bg-black text-gray-300 mt-16">
+    <div class="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div>
+        <h3 class="text-white font-semibold text-lg mb-3">Quick Links</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="#contact" class="hover:text-blue-400 transition">📩 Contact Us</a></li>
+          <li><a href="#report" class="hover:text-blue-400 transition">🚫 Report Abuse</a></li>
+          <li><a href="#privacy" class="hover:text-blue-400 transition">🔒 Privacy Policy</a></li>
+        </ul>
+      </div>
+      <div class="md:text-right text-sm text-gray-400">
+        <h3 class="text-white font-semibold text-lg mb-2">Developed By</h3>
+        <p class="leading-relaxed">
+          <strong>Vaibhav Nhayade</strong><br>
+          <a href="https://www.rcpit.ac.in/" target="_blank" class="hover:text-blue-400">RCPIT Shirpur</a><br>
+          Department of <span class="text-blue-400">AI and Data Science</span>
+        </p>
+      </div>
+    </div>
+    <div class="border-t border-gray-700 text-center py-4 text-xs text-gray-500">
+      © 2025 Vaibhav Nhayade. All Rights Reserved.
+    </div>
+  </footer>
+
+  <!-- JS (unchanged core) -->
+  <script>
+    const API_BASE = "http://127.0.0.1:5000/api";
+
+    document.getElementById("loginBtn").onclick = () => alert("🔐 Login functionality is available in backend.");
+    document.getElementById("signupBtn").onclick = () => alert("👤 Signup form coming soon.");
+
+    document.querySelector('a[href="#contact"]').onclick = () => alert("📩 Contact us at: support@aiquiz.local");
+    document.querySelector('a[href="#report"]').onclick = () => alert("🚫 Report issues to: abuse@aiquiz.local");
+    document.querySelector('a[href="#privacy"]').onclick = () => alert("🔒 Your data is private and local.");
+  </script>
+</body>
+</html>
