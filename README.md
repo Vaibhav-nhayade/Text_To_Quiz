@@ -58,15 +58,16 @@ File System
 
 AI-Quiz-Generator/
 │
-├── app.py # Flask backend API
-├── app.db # SQLite database
-├── requirements.txt # All dependencies
-├── .env # Gemini API key + DB path
+├── app.py              # Flask backend API
+├── app.db              # SQLite database
+├── requirements.txt    # Python dependencies
+├── .env                # Environment variables (Gemini API key, DB path)
 │
-├── index.html # Homepage (quiz type selection)
-├── quiz.html # Displays generated quiz
-├── script.js # Frontend logic (UI + API)
+├── index.html          # Homepage for quiz type/topic selection
+├── quiz.html           # Page displaying generated quiz
+├── script.js           # Frontend logic (UI + API interactions)
 │
-├── static/ (optional) # Assets, images, CSS if needed
+├── static/             # (Optional) Assets, CSS, images, icons
 │
-└── README.md # Project documentation
+└── README.md           # Project documentation
+
