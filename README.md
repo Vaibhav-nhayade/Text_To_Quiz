@@ -54,21 +54,5 @@ Designed as a B.Tech final-year project integrating **AI + Web Development + Dat
            │ history table                │
            └──────────────────────────────┘
 
-File System
-
-AI-Quiz-Generator/
-│
-├── app.py               # Flask backend API
-├── app.db               # SQLite database
-├── requirements.txt     # Python dependencies
-├── .env                 # Environment variables (Gemini API key, DB path)
-│
-├── index.html           # Homepage for quiz type/topic selection
-├── quiz.html            # Page displaying generated quiz
-├── script.js            # Frontend logic (UI + API interactions)
-│
-├── static/              # (Optional) Assets, CSS, images, icons
-│
-└── README.md            # Project documentation
 
 
