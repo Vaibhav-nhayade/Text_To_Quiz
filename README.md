@@ -1,4 +1,4 @@
-# 🧠 AI Quiz Generator using Google Gemini API
+# AI Quiz Generator 
 
 An intelligent web application that generates **MCQs**, **Fill-in-the-Blank**, and **True/False** questions from any given paragraph or topic using **Google Gemini AI**.
 
